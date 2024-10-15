@@ -128,12 +128,15 @@ const RowOptions = ({ id }: { id: any }) => {
   const handleClose = () => setOpen(false)
 
   const [openDetails, setOpenDetails] = useState(false)
+  const [openCheklist, setOpenCheklist] = useState(false)
 
   // Function to open the details dialog
   const handleOpenDetails = () => setOpenDetails(true)
+  const handleOpenCheklist = () => setOpenCheklist(true)
 
   // Function to close the details dialog
   const handleCloseDetails = () => setOpenDetails(false)
+  const handleCloseCheklist = () => setOpenCheklist(false)
   const handleVerifikasi = () => {
     const token = localStorage.getItem('token') // Assuming token is stored in localStorage
     axiosConfig
@@ -159,10 +162,38 @@ const RowOptions = ({ id }: { id: any }) => {
         toast.error("Failed. This didn't work.")
       })
   }
+  const handleAccepted = () => {
+    const token = localStorage.getItem('token') // Assuming token is stored in localStorage
+    axiosConfig
+      .post(
+        '/terima-siswa-baru',
+        { id },
+        {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      .then(response => {
+        if (response.status == 200) {
+          toast.success('Successfully Accepted!')
+          fetchStudentData()
+          dispatch(fetchDataPpdb({ school_id: getDataLocal.school_id, q: '' }))
+          setOpenCheklist(false)
+        }
+      })
+      .catch(() => {
+        toast.error("Failed. This didn't work.")
+      })
+  }
 
   return (
     <>
       {/* Detail Button */}
+      <IconButton size='small' color='warning' onClick={handleOpenCheklist}>
+        <Icon icon='tabler:check' />
+      </IconButton>
       <IconButton size='small' color='primary' onClick={handleOpenDetails}>
         <Icon icon='tabler:info-circle' />
       </IconButton>
@@ -327,6 +358,38 @@ const RowOptions = ({ id }: { id: any }) => {
               Verifikasi
             </Button>
           )}
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openCheklist} onClose={handleCloseCheklist} maxWidth='sm' fullWidth>
+        <DialogTitle>{'Detail Siswa Baru'}</DialogTitle>
+        <DialogContent>
+          {student ? (
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Grid container alignItems='center'>
+                  {/* Tambahkan pesan konfirmasi */}
+                  <Typography variant='body1'>Apakah Anda yakin ingin menerima siswa ini?</Typography>
+                </Grid>
+              </Grid>
+
+              {/* Tambahkan field lain jika diperlukan */}
+            </Grid>
+          ) : (
+            <DialogContentText>Memuat detail siswa...</DialogContentText>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCheklist} color='primary'>
+            Tutup
+          </Button>
+          {student &&
+            student.status !== 'Accepted' &&
+            student.status !== 'Registered' &&
+            student.status_pembayaran === 'Paid' && (
+              <Button onClick={handleAccepted} color='success'>
+                Terima
+              </Button>
+            )}
         </DialogActions>
       </Dialog>
     </>

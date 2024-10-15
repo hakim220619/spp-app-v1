@@ -39,7 +39,6 @@ export const fetchData = createAsyncThunk('appUsers/fetchData', async (params: D
     // Filter data berdasarkan school_id
     filteredData = response.data.filter((item: any) => item.school_id === school_id && item.role !== 180)
   }
-  console.log(filteredData)
 
   return filteredData
 })
