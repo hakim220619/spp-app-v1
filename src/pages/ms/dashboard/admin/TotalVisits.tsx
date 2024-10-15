@@ -13,11 +13,19 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import Icon from 'src/@core/components/icon'
 
 interface TotalVisitProps {
-  Data: any
+  Data: Array<{ waktu: string; total: number }>
 }
+
 const TotalVisit = (props: TotalVisitProps) => {
   const { Data } = props
-  console.log(Data)
+
+  // Pastikan Data memiliki minimal dua elemen untuk mencegah error
+  if (!Data || Data.length < 2) {
+    return <Typography variant='body2'>Data tidak tersedia</Typography>
+  }
+
+  const totalVisits = Data[0].total + Data[1].total
+  const percentage = (Data[0].total / Data[1].total) * 100
 
   return (
     <Card>
@@ -25,11 +33,11 @@ const TotalVisit = (props: TotalVisitProps) => {
         <Box sx={{ mb: 6.5, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
           <Box>
             <Typography variant='body2'>Total Visits</Typography>
-            <Typography variant='h6'>{Data[0].total + Data[1].total}</Typography>
+            <Typography variant='h6'>{totalVisits}</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { color: 'success.main' } }}>
             <Typography variant='subtitle2' sx={{ color: 'success.main' }}>
-              {(Data[0].total / Data[1].total) * 100}%
+              {percentage.toFixed(2)}%
             </Typography>
             <Icon icon='mdi:chevron-up' />
           </Box>

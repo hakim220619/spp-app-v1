@@ -229,6 +229,8 @@ const AdminDashboard = () => {
             school_id: getDataLocal.school_id // Send the school_id as a query parameter
           }
         })
+        // console.log(response.data)
+
         setTotalLoginMmLogs(response.data)
       } catch (error) {
         console.error('Error fetching total pembayaran:', error)
@@ -381,7 +383,6 @@ const AdminDashboard = () => {
               }}
             />
           </Grid>
-
           <Grid item xs={12} sm={6} md={3}>
             <TotalVisit Data={totalLoginMmLogs} />
           </Grid>
