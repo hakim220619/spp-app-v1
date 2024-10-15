@@ -56,7 +56,7 @@ const AuthProvider = ({ children }: Props) => {
           await checkLogin(storedToken)
         } else {
           setLoading(false)
-          router.replace('/ppdb/login')
+          router.replace('/login')
         }
       }
 
