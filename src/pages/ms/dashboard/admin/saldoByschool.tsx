@@ -141,7 +141,6 @@ const SaldoBySchool = () => {
         <Typography variant='h6' color='error'>
           {formatRupiah(totalSaldoBySchool)}
         </Typography>
-
         <ReactApexcharts type='line' height={totalTransaksiBySchool + 15} options={options} series={series} />
       </CardContent>
     </Card>
