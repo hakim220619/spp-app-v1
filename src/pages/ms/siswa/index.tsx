@@ -13,7 +13,8 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  InputAdornment
 } from '@mui/material'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import { SelectChangeEvent } from '@mui/material/Select'
@@ -46,6 +47,14 @@ const RowOptions = ({ uid }: { uid: any }) => {
   const [school_id] = useState<number>(getDataLocal.school_id)
   const [value] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false) // Tambahkan state isLoading
+  const [openPasswordModal, setOpenPasswordModal] = useState(false)
+
+  const [values, setValues] = useState({
+    newPassword: '',
+    confirmNewPassword: '',
+    showNewPassword: false,
+    showConfirmNewPassword: false
+  })
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
 
@@ -69,8 +78,63 @@ const RowOptions = ({ uid }: { uid: any }) => {
   const handleClickOpenDelete = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const handleOpenPasswordModal = () => setOpenPasswordModal(true)
+  const handleClosePasswordModal = () => setOpenPasswordModal(false)
+
+  const handleNewPasswordChange = (prop: keyof typeof values) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
+
+  const handleClickShowNewPassword = () => {
+    setValues({ ...values, showNewPassword: !values.showNewPassword })
+  }
+
+  const handleClickShowConfirmNewPassword = () => {
+    setValues({ ...values, showConfirmNewPassword: !values.showConfirmNewPassword })
+  }
+
+  const SetNewPassword = async () => {
+    if (values.newPassword !== values.confirmNewPassword) {
+      toast.error('Password tidak sama!')
+      
+      return
+    }
+
+    try {
+      // Ambil token dari local storage
+      const token = localStorage.getItem('token')
+
+      await axiosConfig.post(
+        '/new-password-all',
+        {
+          password: values.newPassword,
+          uid: uid // Sertakan uid jika perlu
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}` // Set Authorization header dengan token
+          }
+        }
+      )
+      setValues({
+        newPassword: '',
+        confirmNewPassword: '',
+        showNewPassword: false,
+        showConfirmNewPassword: false
+      })
+      toast.success('Password berhasil diubah!')
+      setOpenPasswordModal(false)
+    } catch (error) {
+      console.error('Error setting new password:', error)
+      toast.error('Gagal mengubah password. Silakan coba lagi.')
+    }
+  }
+
   return (
     <>
+      <IconButton size='small' color='warning' onClick={handleOpenPasswordModal}>
+        <Icon icon='tabler:lock' />
+      </IconButton>
       <IconButton size='small' color='success' onClick={handleRowEditedClick}>
         <Icon icon='tabler:edit' />
       </IconButton>
@@ -88,6 +152,83 @@ const RowOptions = ({ uid }: { uid: any }) => {
           </Button>
           <Button color='error' type='submit' disabled={isLoading} onClick={handleDelete}>
             {isLoading ? <CircularProgress size={24} /> : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={openPasswordModal}
+        onClose={handleClosePasswordModal}
+        aria-labelledby='form-dialog-title'
+        fullWidth
+        maxWidth='xs'
+      >
+        <DialogTitle id='form-dialog-title'>Reset Password</DialogTitle>
+        <DialogContent>
+          <form
+            noValidate
+            autoComplete='off'
+            onSubmit={e => {
+              e.preventDefault()
+              SetNewPassword()
+            }}
+          >
+            <CustomTextField
+              fullWidth
+              autoFocus
+              label='New Password'
+              value={values.newPassword}
+              placeholder='············'
+              sx={{ display: 'flex', mb: 4 }}
+              id='auth-reset-password-v2-new-password'
+              onChange={handleNewPasswordChange('newPassword')}
+              type={values.showNewPassword ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onClick={handleClickShowNewPassword}
+                      onMouseDown={e => e.preventDefault()}
+                      aria-label='toggle password visibility'
+                    >
+                      <Icon fontSize='1.25rem' icon={values.showNewPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+            <CustomTextField
+              fullWidth
+              label='Confirm Password'
+              placeholder='············'
+              sx={{ display: 'flex', mb: 4 }}
+              value={values.confirmNewPassword}
+              id='auth-reset-password-v2-confirm-password'
+              type={values.showConfirmNewPassword ? 'text' : 'password'}
+              onChange={handleNewPasswordChange('confirmNewPassword')}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onMouseDown={e => e.preventDefault()}
+                      aria-label='toggle password visibility'
+                      onClick={handleClickShowConfirmNewPassword}
+                    >
+                      <Icon fontSize='1.25rem' icon={values.showConfirmNewPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePasswordModal} color='secondary'>
+            Cancel
+          </Button>
+          <Button onClick={SetNewPassword} color='primary'>
+            Set Password
           </Button>
         </DialogActions>
       </Dialog>

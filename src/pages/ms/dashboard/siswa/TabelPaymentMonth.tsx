@@ -52,7 +52,7 @@ const columns: GridColDef[] = [
     field: 'type',
     headerName: 'Tipe Pembayaran',
     flex: 0.175,
-    minWidth: 120,
+    minWidth: 150,
     renderCell: (params: GridRenderCellParams) => {
       const type = typeObj[params.row.type]
 
@@ -91,7 +91,7 @@ const columns: GridColDef[] = [
     field: 'verified',
     headerName: 'Proses Pembayaran',
     flex: 0.175,
-    minWidth: 140,
+    minWidth: 180,
     valueGetter: params => {
       // Check if the type is BULANAN or BEBAS
       return params.row.type === 'BULANAN' ? params.row.verified : params.row.detail_verified

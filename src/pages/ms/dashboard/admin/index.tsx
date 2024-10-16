@@ -339,7 +339,7 @@ const AdminDashboard = () => {
                 chipColor: 'success',
                 trendNumber: '',
                 chipText: `${new Date().getFullYear()}`,
-                src: '/images/all/gambar4.png'
+                src: '/images/all/gambar2.png'
               }}
             />
           </Grid>
@@ -352,7 +352,7 @@ const AdminDashboard = () => {
                 chipColor: 'success',
                 trendNumber: '',
                 chipText: `${new Date().getFullYear()}`,
-                src: '/images/all/gambar4.png'
+                src: '/images/all/gambar3.png'
               }}
             />
           </Grid>
@@ -378,7 +378,7 @@ const AdminDashboard = () => {
                 chipColor: 'success',
                 trendNumber: '',
                 chipText: `${new Date().getFullYear()}`,
-                src: '/images/all/gambar4.png'
+                src: '/images/all/gambar2.png'
               }}
             />
           </Grid>

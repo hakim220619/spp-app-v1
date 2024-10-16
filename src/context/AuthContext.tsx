@@ -35,6 +35,8 @@ const AuthProvider = ({ children }: Props) => {
 
   // ** Hooks
   const router = useRouter()
+  const { id } = router.query
+  console.log(id)
 
   useEffect(() => {
     if (router.pathname == '/ppdb') {
@@ -45,6 +47,12 @@ const AuthProvider = ({ children }: Props) => {
       setLoading(false)
     } else if (router.pathname == '/ppdb/dahsboard') {
       router.push('/ppdb/dahsboard')
+      setLoading(false)
+      
+      return
+    } else if (router.pathname.startsWith('/resetPassword') && id) {
+      // Jika path adalah '/resetPassword/[id]' dan terdapat id
+      router.push(`/resetPassword/${id}`)
       setLoading(false)
 
       return
@@ -138,12 +146,14 @@ const AuthProvider = ({ children }: Props) => {
       initAuth()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [router.query.id])
 
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
     axiosConfig
       .post('/login', params)
       .then(async response => {
+        // console.log(response)
+
         if (params.rememberMe) {
           window.localStorage.setItem('token', response.data.accessToken)
           window.localStorage.setItem('refreshToken', response.data.refreshToken) // Ensure to store refresh token

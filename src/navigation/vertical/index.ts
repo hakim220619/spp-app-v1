@@ -158,6 +158,12 @@ const navigation = (): VerticalNavItemsType => {
         path: '/ms/dashboard/admin'
       },
       {
+        title: 'Master Data',
+        icon: 'tabler:users',
+        badgeColor: 'error',
+        children: [{ title: 'Siswa', path: '/ms/siswa', subject: 'ms-siswa' }]
+      },
+      {
         title: 'Tunggakan',
         icon: 'tabler:bell-dollar',
         path: '/ms/tunggakan'
@@ -166,6 +172,11 @@ const navigation = (): VerticalNavItemsType => {
         title: 'Pembayaran',
         icon: 'ion:wallet-outline',
         path: '/ms/pembayaran/admin'
+      },
+      {
+        title: 'Setting Pembayaran',
+        icon: 'ion:wallet',
+        path: '/ms/setting/pembayaran'
       }
     ]
   } else {

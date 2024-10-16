@@ -87,8 +87,8 @@ const RowOptions = ({ id }: { id: any }) => {
 
 const columns: GridColDef[] = [
   { field: 'no', headerName: 'No', width: 70 },
-  { field: 'template_name', headerName: 'Nama Template', flex: 0.175, minWidth: 540 },
-  { field: 'deskripsi', headerName: 'Function', flex: 0.25, minWidth: 80 },
+  { field: 'template_name', headerName: 'Nama Template', flex: 0.175, minWidth: 500 },
+  { field: 'deskripsi', headerName: 'Function', flex: 0.25, minWidth: 280 },
   { field: 'message', headerName: 'Pesan', flex: 0.25, minWidth: 290 },
   {
     field: 'status',

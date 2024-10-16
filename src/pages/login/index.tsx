@@ -63,17 +63,17 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 }))
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().min(5).required()
+  emailOrnisn: yup.string().required(),
+  password: yup.string().min(1).required()
 })
 
 const defaultValues = {
   password: '',
-  email: ''
+  emailOrnisn: ''
 }
 
 interface FormData {
-  email: string
+  emailOrnisn: string
   password: string
 }
 
@@ -100,9 +100,9 @@ const LoginPage = () => {
 
   const onSubmit = (data: FormData) => {
     setIsLoading(true)
-    const { email, password } = data
-    auth.login({ email, password, rememberMe }, () => {
-      setError('email', {
+    const { emailOrnisn, password } = data
+    auth.login({ emailOrnisn, password, rememberMe }, () => {
+      setError('emailOrnisn', {
         type: 'manual',
         message: 'Email or Password is invalid'
       })
@@ -181,20 +181,20 @@ const LoginPage = () => {
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
               <Box sx={{ mb: 4 }}>
                 <Controller
-                  name='email'
+                  name='emailOrnisn'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange, onBlur } }) => (
                     <CustomTextField
                       fullWidth
                       autoFocus
-                      label='Email'
+                      label='Email/Nisn'
                       value={value}
                       onBlur={onBlur}
                       onChange={onChange}
                       placeholder='admin@vuexy.com'
-                      error={Boolean(errors.email)}
-                      {...(errors.email && { helperText: errors.email.message })}
+                      error={Boolean(errors.emailOrnisn)}
+                      {...(errors.emailOrnisn && { helperText: errors.emailOrnisn.message })}
                     />
                   )}
                 />

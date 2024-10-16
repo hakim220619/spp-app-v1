@@ -102,8 +102,8 @@ const EcommerceDashboard = () => {
                 stats: formatRupiah(totalTunggakanBulanan),
                 title: 'Total Tunggakan Pembayaran Bulanan',
                 chipColor: 'success',
-                trendNumber: '+ 10%',
-                chipText: 'Year of 2024',
+                trendNumber: '',
+                chipText: `${new Date().getFullYear()}`,
                 src: '/images/all/gambar1.png'
               }}
             />
@@ -114,8 +114,8 @@ const EcommerceDashboard = () => {
                 stats: formatRupiah(totalTunggakanFree),
                 title: 'Total Tunggakan Pembayaran Bebas',
                 chipColor: 'success',
-                trendNumber: '+ 10%',
-                chipText: 'Year of 2024',
+                trendNumber: '',
+                chipText: `${new Date().getFullYear()}`,
                 src: '/images/all/gambar2.png'
               }}
             />
